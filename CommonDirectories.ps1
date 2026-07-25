@@ -74,9 +74,10 @@ foreach ($target in $scanTargets) {
         # 1. Filtro Forense Avanzado: Comprobar la firma o compañía del archivo
         $versionInfo = Get-ItemProperty -Path $file.FullName -ErrorAction SilentlyContinue | Select-Object -ExpandProperty VersionInfo -ErrorAction SilentlyContinue
         if ($null -ne $versionInfo) {
-            # CONTROL BLINDADO: Filtrado directo sin métodos propensos a fallos por nulos
-            if ($null -ne $versionInfo.CompanyName -and $versionInfo.CompanyName -notlike "") {
-                $companyName = $versionInfo.CompanyName
+            $rawCompany = $versionInfo.CompanyName
+            # CONTROL SEGURO: Verificación infalible de texto nulo o vacío
+            if (-not [string]::IsNullOrWhiteSpace($rawCompany)) {
+                $companyName = $rawCompany
                 if ($companyName -notmatch "Microsoft") {
                     $isNonMicrosoft = $true
                 }
