@@ -61,7 +61,7 @@ foreach ($target in $scanTargets) {
         $totalFilesChecked++
         $dirCheckedCount++
         
-        # BARRA DE PROGRESO EN TIEMPO REAL: Te avisa de forma dinámica en la consola
+        # BARRA DE PROGRESO EN TIEMPO REAL
         if ($dirCheckedCount % 250 -eq 0) {
             Write-Host "  [>] Inspected: $dirCheckedCount files..." -ForegroundColor Gray
         }
@@ -74,7 +74,8 @@ foreach ($target in $scanTargets) {
         # 1. Filtro Forense Avanzado: Comprobar la firma o compañía del archivo
         $versionInfo = Get-ItemProperty -Path $file.FullName -ErrorAction SilentlyContinue | Select-Object -ExpandProperty VersionInfo -ErrorAction SilentlyContinue
         if ($null -ne $versionInfo) {
-            if ($null -ne $versionInfo.CompanyName -and $versionInfo.CompanyName -trim() -ne "") {
+            # CORRECCIÓN AQUÍ: Uso correcto del método nativo .Trim()
+            if ($null -ne $versionInfo.CompanyName -and $versionInfo.CompanyName.Trim() -ne "") {
                 $companyName = $versionInfo.CompanyName
                 if ($companyName -notmatch "Microsoft") {
                     $isNonMicrosoft = $true
@@ -156,5 +157,6 @@ foreach ($s in $samples) {
     }
 }
 
-# Firma personalizada solicitada
+# Firma personalizada
 Write-Host "`nHit up @ikxpzl if you find any issues" -ForegroundColor Cyan
+
