@@ -74,8 +74,8 @@ foreach ($target in $scanTargets) {
         # 1. Filtro Forense Avanzado: Comprobar la firma o compañía del archivo
         $versionInfo = Get-ItemProperty -Path $file.FullName -ErrorAction SilentlyContinue | Select-Object -ExpandProperty VersionInfo -ErrorAction SilentlyContinue
         if ($null -ne $versionInfo) {
-            # CORRECCIÓN AQUÍ: Uso correcto del método nativo .Trim()
-            if ($null -ne $versionInfo.CompanyName -and $versionInfo.CompanyName.Trim() -ne "") {
+            # CONTROL BLINDADO: Filtrado directo sin métodos propensos a fallos por nulos
+            if ($null -ne $versionInfo.CompanyName -and $versionInfo.CompanyName -notlike "") {
                 $companyName = $versionInfo.CompanyName
                 if ($companyName -notmatch "Microsoft") {
                     $isNonMicrosoft = $true
@@ -159,4 +159,3 @@ foreach ($s in $samples) {
 
 # Firma personalizada
 Write-Host "`nHit up @ikxpzl if you find any issues" -ForegroundColor Cyan
-
