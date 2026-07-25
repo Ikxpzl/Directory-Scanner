@@ -63,7 +63,7 @@ foreach ($target in $scanTargets) {
                 $isSuspicious = $true
             }
         } else {
-            # Si no tiene firma/compañía (común en malware/cheats caseros) se marca como sospechoso
+            # Si no tiene firma/compañía se marca como sospechoso
             $isSuspicious = $true
         }
         
@@ -100,16 +100,18 @@ Write-Host "  Files checked: $totalFilesChecked" -ForegroundColor Gray
 Write-Host "  Non-Microsoft files found: $nonMicrosoftFound" -ForegroundColor Red
 Write-Host "  Output: $outputPath" -ForegroundColor Yellow
 
-# Mostrar una pequeña muestra de rutas detectadas (Sample Paths) tal como en tu imagen
-Write-Header "Sample paths:"
+# Mostrar una pequeña muestra de rutas detectadas (Sample Paths)
+Write-Host "`nSample paths:" -ForegroundColor Cyan
 $samples = $reportLines | Select-Object -First 5
 foreach ($s in $samples) {
     if ($null -ne $s) {
         $fInfo = Get-Item $s
         $sizeMb = [math]::Round(($fInfo.Length / 1MB), 2)
         Write-Host "  $s " -NoNewline -ForegroundColor Gray
-        Write-Host "($sizeKb MB)" -ForegroundColor Green
+        Write-Host "($sizeMb MB)" -ForegroundColor Green
     }
 }
 
-Write-Host "`nHit up @praiselily if you find any issues" -ForegroundColor Cyan
+# MODIFICACIÓN DE FIRMA SOLICITADA
+Write-Host "`nHit up @ikxpzl if you find any issues" -ForegroundColor Cyan
+
